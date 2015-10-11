@@ -1,6 +1,9 @@
 frontend-nanodegree-arcade-game
 ===============================
+Open index.html to run the game.
 
-Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015/l-3072058665/m-3072588797
+Controls:
+Use arrow key to move your character up, down, left and right.
+Try not to get hit by the bugs and make your way to the top to level up.
 
-for self-checking their submission.
+Have fun.

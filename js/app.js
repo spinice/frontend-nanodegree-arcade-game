@@ -1,8 +1,9 @@
+// Pre calculated levels and speeds for the enemies
 var levels = [225, 145, 60];
 var speeds = [100, 200, 300];
 
+//End of game and level up event so we can reset all the different objects
 var endOfGameEvent = new Event('endGame');
-
 var levelUpEvent = new Event('levelUp');
 
 // Enemies our player must avoid
@@ -24,10 +25,10 @@ Enemy.prototype.update = function (dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     newPosition = this.x + this.speed * dt;
-    if(newPosition < ctx.canvas.width) {
+    if(newPosition < ctx.canvas.width) { // if still in canvas draw
         this.x = newPosition;
     }
-    else {
+    else { // else start at beging
         this.x = -100;
     }
     
@@ -38,10 +39,13 @@ Enemy.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 };
 
+//Initialize an enemy, eventually when can have more initialization as the game gets more complexe.
 Enemy.prototype.init = function (factor) {
     this.generateEnemy(factor)
 };
 
+// Randomly generates enemy stats
+// Factor parameter is used to create highe levels of difficulty for enemies.
 Enemy.prototype.generateEnemy = function (factor) {
     this.speed = factor * speeds[Math.floor(Math.random() * 2) + 0];
     this.y = levels[Math.floor(Math.random() * 2) + 0];
@@ -50,25 +54,27 @@ Enemy.prototype.generateEnemy = function (factor) {
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
-
 var Player = function () {
     this.sprite = 'images/char-boy.png';
     this.init();
     
 };
 
+// Init player
 Player.prototype.init = function () {
     this.level = 1;
     this.reset();
 };
 
+// Sets player to start position
 Player.prototype.reset = function () {
     this.x = 200;
     this.y = 375;
 };
 
+// Updates the player position if arrow key is pressed if not
+// verifies if there is a collision with an enemy.
 Player.prototype.update = function () {
-    
     if(this.arrow != null) {
         var newPosition;
         if(this.arrow === 'left') {
@@ -82,7 +88,7 @@ Player.prototype.update = function () {
             if(newPosition >= 35) {
                 this.y = newPosition;
             }
-            else {
+            else { // We are at the end of the map level up.
                 this.atEnd()
             }
         }
@@ -104,7 +110,7 @@ Player.prototype.update = function () {
     this.collision();
 };
 
-
+// Verifies if player collides with an enemy
 Player.prototype.collision = function () {
     for(var i = 0; i < allEnemies.length; i++) {
         if(allEnemies[i].y >= this.y && allEnemies[i].y <= this.y + 40) {
@@ -117,6 +123,7 @@ Player.prototype.collision = function () {
     }
 };
 
+// At top of map 
 Player.prototype.atEnd = function () {
     //after making it to end, reset
     this.reset();
@@ -135,6 +142,7 @@ Player.prototype.handleInput = function(input) {
     this.arrow = input;
 };
 
+// Calculates the dificulty factor from the players level.
 Player.prototype.factor = function () {
     if(this.level < 5) {
         return 1;
